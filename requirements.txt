@@ -1,0 +1,4 @@
+joblib
+mutagen
+pydub
+youtube_dl
