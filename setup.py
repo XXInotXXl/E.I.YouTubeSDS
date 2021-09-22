@@ -5,5 +5,5 @@ base = None
 setup(
     name="E.I.YouTubeSDS",
     version="1.0",
-    executables=[Executable("E.I.YouTubeSDS.py", base=base, icon="icon.ico")]
+    executables=[Executable("E.I.YouTubeDS.py", base=base, icon="icon.ico")]
 )
