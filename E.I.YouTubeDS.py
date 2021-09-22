@@ -37,55 +37,55 @@ def select_file(title="Select File", defaultextension="", filetypes=((),)):
 
 
 def make_path(file: dict):
-    return ROOT + FOLDER + file['title'] + '.' + file['ext']
+    return ROOT + FOLDER + file["title"] + "." + file["ext"]
 
 
 def write_title(file: dict):
     path = make_path(file)
     if "mp3" in path:
         print(path)
-        write_metadata(path, file['title'])
+        write_metadata(path, file["title"])
 
 
 def downloads(url, keepvideo=False):
     def __ext(value):
         if keepvideo:
             return value
-        return 'mp3'
+        return "mp3"
 
     files = []
     options = {
         True: {
-            'outtmpl': ROOT + FOLDER + '%(title)s.%(ext)s',
-            'format': 'best'
+            "outtmpl": ROOT + FOLDER + "%(title)s.%(ext)s",
+            "format": "best"
         },
         False: {
-            'audioformat': 'mp3',
-            'outtmpl': ROOT + FOLDER + '%(title)s.%(ext)s',
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
+            "audioformat": "mp3",
+            "outtmpl": ROOT + FOLDER + "%(title)s.%(ext)s",
+            "format": "bestaudio/best",
+            "postprocessors": [{
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
             }],
-            'keepvideo': False,
+            "keepvideo": False,
         }
     }
 
     with youtube_dl.YoutubeDL(options[keepvideo]) as ydl:
         metadata = ydl.extract_info(url, download=True)
         if "playlist" in url:
-            for video in metadata['entries']:
+            for video in metadata["entries"]:
                 files.append({
-                    'title': video.get('title'),
-                    'ext': __ext(video.get('ext')),
-                    'chapters': video.get('chapters')
+                    "title": video.get("title"),
+                    "ext": __ext(video.get("ext")),
+                    "chapters": video.get("chapters")
                 })
         else:
             files.append({
-                'title': metadata.get('title'),
-                'ext': __ext(metadata.get('ext')),
-                'chapters': metadata.get('chapters')
+                "title": metadata.get("title"),
+                "ext": __ext(metadata.get("ext")),
+                "chapters": metadata.get("chapters")
             })
     for file in files:
         try:
@@ -115,10 +115,10 @@ def slice(filename, chapters):
 
 def write_metadata(filename, title="", artist="", album="", composer=""):
     audio = EasyID3(filename)
-    audio['title'] = title
-    audio['artist'] = artist
-    audio['album'] = album
-    audio['composer'] = composer
+    audio["title"] = title
+    audio["artist"] = artist
+    audio["album"] = album
+    audio["composer"] = composer
     audio.save()
 
 
@@ -128,22 +128,29 @@ def task(urls, keepvideo: bool, _slice: bool):
             temp = downloads(url, keepvideo)
             for file in temp:
                 if _slice:
-                    slice(make_path(file), file['chapters'])
+                    slice(make_path(file), file["chapters"])
     except:
         return
 
 
 def process(urls, opt):
-    if opt == "1":
-        task(urls, keepvideo=True, _slice=False)
-    elif opt == "2":
-        task(urls, keepvideo=False, _slice=False)
-    elif opt == '3':
-        task(urls, keepvideo=True, _slice=True)
-    elif opt == '4':
-        task(urls, keepvideo=False, _slice=True)
-    elif opt == '88':
+    if opt == "88":
         print("""老爸老妈我爱你们哟~""")
+    else:
+        if opt == "1":
+            task(urls, keepvideo=True, _slice=False)
+        elif opt == "2":
+            task(urls, keepvideo=False, _slice=False)
+        elif opt == "3":
+            task(urls, keepvideo=True, _slice=True)
+        elif opt == "4":
+            task(urls, keepvideo=False, _slice=True)
+        print("""
+        --------------------------------------------
+          Completed.
+          Please check File E.I.YouTubeDS/Download      
+        --------------------------------------------
+        """)
 
 
 class Home:
@@ -203,5 +210,5 @@ Create a new line (press "Enter") to continue.
         input("""Press "Enter" to leave.\n""")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Home().main()
